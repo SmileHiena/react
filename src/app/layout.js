@@ -77,12 +77,12 @@ export default function RootLayout({ children }) {
                     <div className="collapse" id="Sanpham">
                       <ul className="nav nav-collapse">
                         <li>
-                          <a href="http://localhost:3001/sanpham">
+                          <a href="https://react-sand-six.vercel.app/sanpham">
                             <span className="sub-item">Sản phẩm</span>
                           </a>
                         </li>
                         <li>
-                          <a href="http://localhost:3001/danhmuc">
+                          <a href="https://react-sand-six.vercel.app/danhmuc">
                             <span className="sub-item">Danh mục</span>
                           </a>
                         </li>
