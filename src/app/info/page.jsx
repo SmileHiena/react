@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 
 export default function Info() {
+    const document = null;
     // Lấy token từ cookie ở browser
     const token = document.cookie.split(';').find((c) => c.trim().startsWith('token='));
     const tokenValue = token?.split('=')[1];
