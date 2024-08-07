@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
+import { useEffect, useState } from 'react';
 
 export default function RootLayout({ children }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = document.cookie.split(';').find((c) => c.trim().startsWith('token='));
+    if (token) {
+        setIsLoggedIn(true);
+    }
+}, []);
   return (
     <>
       <html>
@@ -64,7 +72,7 @@ export default function RootLayout({ children }) {
                   </li>
                   <li className="nav-section">
                     <span className="sidebar-mini-icon">
-                      <i className="fa fa-ellipsis-h"></i>
+                      <i className="fa fa-product"></i>
                     </span>
                     <h4 className="text-section">Components</h4>
                   </li>
@@ -89,6 +97,28 @@ export default function RootLayout({ children }) {
                       </ul>
                     </div>
                   </li>
+                    <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="#login">
+                    <i class="fas fa-user"></i>
+                    <p>User</p>
+                    <span class="caret"></span>
+                  </a>
+                  <div class="collapse" id="login">
+                    <ul class="nav nav-collapse">
+                      <li>
+                        <a href="/dangnhap">
+                          <span class="sub-item">Login</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/dangky">
+                          <span class="sub-item">Register</span>
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </div>
+                </li>
                 </ul>
               </div>
             </div>

@@ -310,3 +310,18 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     right: -85%; } }
 
 /*# sourceMappingURL=demo.css.map */
+
+
+.logout-button {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #e84118;
+}

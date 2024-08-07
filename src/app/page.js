@@ -1,4 +1,48 @@
+"use client";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from 'react';
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
+
+  const router = useRouter;
+
+  useEffect(() => {
+      const token = document.cookie.split(';').find((c) => c.trim().startsWith('token='));
+      const tokenValue = token?.split('=')[1];
+      if (tokenValue) {
+          setIsLoggedIn(true);
+          // Fetch user info if logged in
+          const getUser = async () => {
+              const res = await fetch('http://localhost:3000/detailuser', {
+                  headers: {
+                      Authorization: `Bearer ${tokenValue}`,
+                  },
+              });
+              if (res.ok) {
+                  const data = await res.json();
+                  setUser(data);
+              } else {
+                  console.error('Failed to fetch user data');
+              }
+          };
+          getUser();
+      }
+  }, []);
+//   useEffect(() => {
+//     const token = document.cookie.split(';').find((c) => c.trim().startsWith('token='));
+//     if (token) {
+//         setIsLoggedIn(true);
+//     }
+// }, []);
+const handleLogout = () => {
+  document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+  setIsLoggedIn(false);
+  window.location.href = 'http://localhost:3001/dangnhap';
+  // router.push('/dangnhap');
+};
+
   return (
     <>
       
@@ -46,7 +90,6 @@ export default function Home() {
                     />
                   </div>
                 </nav>
-
                 <ul className="navbar-nav topbar-nav ms-md-auto align-items-center">
                   <li className="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
                     <a
@@ -317,7 +360,7 @@ export default function Home() {
                       </div>
                     </div>
                   </li>
-
+                  {isLoggedIn && user.image ? (
                   <li className="nav-item topbar-user dropdown hidden-caret">
                     <a
                       className="dropdown-toggle profile-pic"
@@ -326,15 +369,17 @@ export default function Home() {
                       aria-expanded="false"
                     >
                       <div className="avatar-sm">
-                        <img
-                          src="assets1/img/profile.jpg"
-                          alt="..."
-                          className="avatar-img rounded-circle"
-                        />
+                      <Link href={isLoggedIn ? '/info' : '/dangnhap'}>
+                          {isLoggedIn && user.image ? (
+                              <img src={`http://localhost:3000/${user.image}`} alt="Avatar" width="100%" />
+                          ) : (
+                              <i className="fas fa-user" />
+                          )}
+                      </Link>
                       </div>
                       <span className="profile-username">
                         <span className="op-7">Hi,</span>
-                        <span className="fw-bold">Hizrian</span>
+                        <span className="fw-bold">{user.fullname}</span>
                       </span>
                     </a>
                     <ul className="dropdown-menu dropdown-user animated fadeIn">
@@ -342,27 +387,24 @@ export default function Home() {
                         <li>
                           <div className="user-box">
                             <div className="avatar-lg">
-                              <img
-                                src="assets1/img/profile.jpg"
-                                alt="image profile"
-                                className="avatar-img rounded"
-                              />
+                            {isLoggedIn && user.image ? (
+                              <img src={`http://localhost:3000/${user.image}`} alt="Avatar" width="100%" />
+                          ) : (
+                              <i className="fas fa-user" />
+                          )}
                             </div>
                             <div className="u-text">
-                              <h4>Hizrian</h4>
-                              <p className="text-muted">hello@example.com</p>
-                              <a
-                                href="profile.html"
-                                className="btn btn-xs btn-secondary btn-sm"
-                              >
+                              <h4>{user.fullname}</h4>
+                              <p className="text-muted">{user.email}</p>
+                              <Link className="btn btn-xs btn-secondary btn-sm" href={isLoggedIn ? '/info' : '/dangnhap'}>
                                 View Profile
-                              </a>
+                              </Link>
                             </div>
                           </div>
                         </li>
                         <li>
                           <div className="dropdown-divider"></div>
-                          <a className="dropdown-item" href="#">
+                          <a className="dropdown-item" href="/info">
                             My Profile
                           </a>
                           <a className="dropdown-item" href="#">
@@ -376,13 +418,14 @@ export default function Home() {
                             Account Setting
                           </a>
                           <div className="dropdown-divider"></div>
-                          <a className="dropdown-item" href="#">
-                            Logout
-                          </a>
+                          <button onClick={handleLogout} className="dropdown-item">
+                            Đăng xuất
+                          </button>
                         </li>
                       </div>
                     </ul>
                   </li>
+                ) : null}
                 </ul>
               </div>
             </nav>
@@ -1062,202 +1105,7 @@ export default function Home() {
             </div>
           </footer>
         </div>
-
-        {/* <!-- Custom template | don't include it in your project! --> */}
-        <div className="custom-template">
-          <div className="title">Settings</div>
-          <div className="custom-content">
-            <div className="switcher">
-              <div className="switch-block">
-                <h4>Logo Header</h4>
-                <div className="btnSwitch">
-                  <button
-                    type="button"
-                    className="selected changeLogoHeaderColor"
-                    data-color="dark"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="blue"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="purple"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="light-blue"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="green"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="orange"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="red"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="white"
-                  ></button>
-                  <br />
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="dark2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="blue2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="purple2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="light-blue2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="green2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="orange2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeLogoHeaderColor"
-                    data-color="red2"
-                  ></button>
-                </div>
-              </div>
-              <div className="switch-block">
-                <h4>Navbar Header</h4>
-                <div className="btnSwitch">
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="dark"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="blue"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="purple"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="light-blue"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="green"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="orange"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="red"
-                  ></button>
-                  <button
-                    type="button"
-                    className="selected changeTopBarColor"
-                    data-color="white"
-                  ></button>
-                  <br />
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="dark2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="blue2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="purple2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="light-blue2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="green2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="orange2"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeTopBarColor"
-                    data-color="red2"
-                  ></button>
-                </div>
-              </div>
-              <div className="switch-block">
-                <h4>Sidebar</h4>
-                <div className="btnSwitch">
-                  <button
-                    type="button"
-                    className="changeSideBarColor"
-                    data-color="white"
-                  ></button>
-                  <button
-                    type="button"
-                    className="selected changeSideBarColor"
-                    data-color="dark"
-                  ></button>
-                  <button
-                    type="button"
-                    className="changeSideBarColor"
-                    data-color="dark2"
-                  ></button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="custom-toggle">
-            <i className="icon-settings"></i>
-          </div>
-        </div>
-      
-      {/* <!-- End Custom template --> */}
+              
     </>
   );
 }
