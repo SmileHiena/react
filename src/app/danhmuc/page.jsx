@@ -7,7 +7,7 @@ export default function Categories() {
   const [data, setData] = useState([]);
 
   const fetchCategories = async () => {
-    const res = await fetch("http://localhost:3000/categories", {
+    const res = await fetch("mongodb+srv://thanhtnps35091:thanhngoc123456@cluster0.oqosth4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/categories", {
       cache: 'no-store'
     });
     const newData = await res.json();
